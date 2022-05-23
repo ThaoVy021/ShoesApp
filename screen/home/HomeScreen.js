@@ -43,7 +43,7 @@ export default HomeScreen = ({navigation}) => {
 
   const renderItemCategory = (item) => (
     <TouchableOpacity
-      onPress={()=> dispatch(fetchProductByCategoryId(item.id))}
+      onPress={()=> dispatch(fetchProductByCategoryId({id: item.id, name: item.category}))}
     >
       <Text style={{color: '#FFF', margin: 8, fontSize: 16, fontWeight: '500'}}>{item.category}</Text>
     </TouchableOpacity>
