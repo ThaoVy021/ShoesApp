@@ -1,0 +1,6 @@
+module Pods_ShoesApp_ShoesAppTests {
+  umbrella header "Pods-ShoesApp-ShoesAppTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
