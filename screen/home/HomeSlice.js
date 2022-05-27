@@ -5,19 +5,15 @@ const initialState = {
     isLoading: false,
     dataProducts: [],
     dataCategories: [],
+    categorySelected: ""
 }
 
 export const homeSlice = createSlice({
     name: "homeSlice",
     initialState: initialState,
     reducers:{
-        getCategories: (state, action) => {
-            state.categoryData = categoryData
-        },
         onSelectedCategory: (state, action) => {
-            let categoryId = action.payload
-            state.currentCategory = action.payload
-            state.menuData = menuData.filter((value) => categoryId == value.categoryId)
+            state.categorySelected = action.payload
         }
     }, 
     extraReducers: (builder)=>{
@@ -37,4 +33,5 @@ export const homeSlice = createSlice({
     }
 })
 
+export const {onSelectedCategory} = homeSlice.actions
 export default homeSlice.reducer 

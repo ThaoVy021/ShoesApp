@@ -3,12 +3,14 @@ import {SafeAreaView, View, Image, Text, FlatList, TouchableOpacity} from 'react
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, fetchCategories, fetchProductByCategoryId } from './HomeThunks';
 import StaggeredList from '@mindinventory/react-native-stagger-view';
+import { onSelectedCategory } from './HomeSlice';
 
 export default HomeScreen = ({navigation}) => {
  
   const dispatch = useDispatch()
   const dataProducts = useSelector((state) => state.home.dataProducts)
   const dataCategories = useSelector((state) => state.home.dataCategories)
+  const categorySelected = useSelector((state) => state.home.categorySelected)
 
   const likeIcon = require('../../assets/images/like.png')
   const iconClose = require('../../assets/images/icon_close.png')
@@ -16,8 +18,9 @@ export default HomeScreen = ({navigation}) => {
 
   useEffect(()=>{
     // dispatch(fetchProducts())
+    console.log('useEffect')
     dispatch(fetchCategories())
-  },[])
+  },[categorySelected])
 
   const renderItem = (item) => (
     <View style={{
@@ -43,9 +46,18 @@ export default HomeScreen = ({navigation}) => {
 
   const renderItemCategory = (item) => (
     <TouchableOpacity
-      onPress={()=> dispatch(fetchProductByCategoryId({id: item.id, name: item.category}))}
+      onPress={()=> dispatch(onSelectedCategory(item.id))}
     >
-      <Text style={{color: '#FFF', margin: 8, fontSize: 16, fontWeight: '500'}}>{item.category}</Text>
+      <Text 
+        style={{
+          color: '#FFF', 
+          margin: 8, 
+          fontSize: 16, 
+          fontWeight: '500',
+          color: item.id == categorySelected ? 'red' : 'white'
+      }}>
+        {item.category}
+      </Text>
     </TouchableOpacity>
   )
 

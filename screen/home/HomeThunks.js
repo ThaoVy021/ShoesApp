@@ -23,10 +23,15 @@ export const fetchProducts = createAsyncThunk(
 */
 export const fetchProductByCategoryId = createAsyncThunk(
   'product/fetchProductByCategoryId',
-  async (categoryId, {dispatch, getState}) => {
-    console.log('fetch Product By CategoryId')
+  async (category) => {
       const resp = await fetch(`http://svcy3.myclass.vn/api/Product/getProductByCategory?categoryId=${categoryId.id}`)
-      const json = await resp.json()
+      if(resp.status == 200 || resp.status == 201){
+        const json = await resp.json()
+        return json.content
+      } else {
+        return [];
+      }
+     
       //dispatch(fetchProducts())
       return json.content
   }
@@ -34,9 +39,11 @@ export const fetchProductByCategoryId = createAsyncThunk(
 
 export const fetchCategories = createAsyncThunk(
   'category/fetchCategories',
-  async () => {
+  async (_,{dispatch,getState}) => {
     const resp = await fetch('http://svcy3.myclass.vn/api/Product/getAllCategory')
     const json = await resp.json()
+
+    dispatch(fetchProductByCategoryId({id: getState().home.categorySelected}))
 
     return json.content
   }
