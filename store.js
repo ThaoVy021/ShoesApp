@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit' 
 import homeReducer from './screen/home/HomeSlice'
+import LoginScreen from './screen/login/LoginScreen'
+import loginReducer from './screen/login/LoginSlice'
 
 export const store = configureStore({
     reducer: {
-      home: homeReducer
+      home: homeReducer,
+      login: loginReducer
     },
 })
 
