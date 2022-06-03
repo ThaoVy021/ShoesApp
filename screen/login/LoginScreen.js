@@ -1,28 +1,45 @@
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TextInput, TouchableOpacity,Animated, Easing } from 'react-native'
 import React, { useEffect } from 'react'
 import styles from './styles/styles'
 import LinearGradient from 'react-native-linear-gradient'
 import { checkLogin, getLocalAccessToken } from './LoginThunk'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function LoginScreen() {
     const bg_login = require('../../assets/images/bg_login.webp')
     const icon_user = require('../../assets/images/icon_user.png')
     const icon_password = require('../../assets/images/ic_password.png')
+    const icon_success = require('../../assets/images/success.png')
     let email = ""
     let password = ""
+
+    const accessToken = useSelector((state) => state.login.accessToken)
+
+    const animWidthValue = new Animated.Value(100)
+    const animInter = animWidthValue.interpolate({
+        inputRange:  [20,100], 
+        outputRange: ['20%', '100%']
+    })
 
     const dispatch = useDispatch()
 
     useEffect(()=>{
         dispatch(getLocalAccessToken())
-
-
-    },[])
+        if(accessToken !== undefined && accessToken !== ""){
+            Animated.timing(
+                animWidthValue,
+                {
+                    toValue: 20,
+                    duration: 500,
+                    useNativeDriver: false
+                }
+            ).start()
+        }
+    },[accessToken])
 
     const onPressLogin = () => {
         dispatch(checkLogin({email: email, password: password}))
-        
+       
     }
 
   return (
@@ -59,17 +76,24 @@ export default function LoginScreen() {
                                 </View>
                             </View>
 
-                            <TouchableOpacity
-                                style={{
-                                    backgroundColor: '#000',
-                                    borderRadius: 5,
-                                    padding: 16,
-                                    marginTop: 24
-                                }}
-                                onPress={()=> onPressLogin() }
-                            >
-                                <Text style={{color: 'white', alignSelf: 'center', fontSize: 16, fontWeight: '500'}}>Login</Text>
-                            </TouchableOpacity>
+                            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                                <Animated.View
+                                    style={[{
+                                        backgroundColor: '#000',
+                                        borderRadius: 40,
+                                        padding: 16,
+                                        marginTop: 24,
+                                        width: animInter
+                                    }]}>
+                                    <TouchableOpacity
+                                        onPress={()=> onPressLogin() }
+                                    >
+                                        <Image style={{width: 30, height: 30}} source={icon_success}/>
+                                        {/* <Text style={{color: 'white', alignSelf: 'center', fontSize: 16, fontWeight: '500'}}>Login</Text> */}
+                                    </TouchableOpacity>
+                                </Animated.View>
+                            </View>
+                           
                             <Text style={{alignSelf: 'center', marginTop: 16}}>Don't have an account? Signup</Text>
                         </View>
                     </View>
